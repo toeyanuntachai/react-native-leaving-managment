@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "811779983710",
+    "firebase_url": "https://igetweb-leaving-management.firebaseio.com",
+    "project_id": "igetweb-leaving-management",
+    "storage_bucket": "igetweb-leaving-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811779983710:android:223c331b39677c96af27cf",
+        "android_client_info": {
+          "package_name": "com.igetweb.leavingmanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811779983710-87nh1b55vo6o9200lcou62rsb5qs7cvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACsu9hU63_KQrR7GL4hulPA64BgpgjQ5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811779983710-87nh1b55vo6o9200lcou62rsb5qs7cvg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
