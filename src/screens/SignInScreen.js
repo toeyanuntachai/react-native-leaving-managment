@@ -61,6 +61,11 @@ export default class SignInScreen extends Component {
 
   _onPasswordChange = password => this.setState({ password });
 
+  _toRegister = () => {
+    const { navigation } = this.props;
+    navigation.navigate('Register');
+  }
+
   render() {
     const { email, password, email_valid, showLoading } = this.state;
 
@@ -89,7 +94,7 @@ export default class SignInScreen extends Component {
                 value={email}
                 inputStyle={{ marginLeft: 10, color: 'white' }}
                 keyboardAppearance="light"
-                placeholder="Email"
+                placeholder="Username"
                 autoFocus={false}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -155,7 +160,7 @@ export default class SignInScreen extends Component {
                 activeOpacity={0.5}
                 titleStyle={{ color: 'white', fontSize: 15 }}
                 containerStyle={{ marginTop: -10 }}
-                onPress={() => console.log('Account created')}
+                onPress={this._toRegister}
               />
             </View>
           </View>
