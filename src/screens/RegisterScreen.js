@@ -8,6 +8,8 @@ import {
   StatusBar,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import firebase from 'react-native-firebase';
+import { USERS_COLLECTION } from '../constant';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -15,8 +17,11 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const BG_IMAGE = require('../assets/images/register_background.jpg');
 
 export default class RegisterScreen extends Component {
-  static navigationOptions = {
-    header: null,
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTransparent: true,
+      headerStyle: { borderBottomWidth: 0 },
+    };
   };
 
   constructor(props) {
@@ -29,6 +34,7 @@ export default class RegisterScreen extends Component {
       login_failed: false,
       showLoading: false,
     };
+    this.fireStoreRef = firebase.firestore().collection(USERS_COLLECTION);
     this.emailInput = React.createRef();
     this.passwordInput = React.createRef();
   }

@@ -64,7 +64,7 @@ export default class SignInScreen extends Component {
   _toRegister = () => {
     const { navigation } = this.props;
     navigation.navigate('Register');
-  }
+  };
 
   render() {
     const { email, password, email_valid, showLoading } = this.state;
