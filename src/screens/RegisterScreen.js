@@ -76,7 +76,7 @@ export default class RegisterScreen extends Component {
         <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
-              <View style={{ marginTop: -10 }}>
+              <View style={{ marginTop: -50 }}>
                 <Text style={styles.travelText}>Become a part of a</Text>
                 <Text style={styles.greatTeamText}>Great team</Text>
               </View>
@@ -97,6 +97,35 @@ export default class RegisterScreen extends Component {
                 inputStyle={{ marginLeft: 10, color: 'white' }}
                 keyboardAppearance="light"
                 placeholder="Username"
+                autoFocus={false}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                returnKeyType="next"
+                ref={this._setEmailRef}
+                onSubmitEditing={this._onEmailSubmit}
+                blurOnSubmit={false}
+                placeholderTextColor="white"
+                errorStyle={{ textAlign: 'center', fontSize: 12 }}
+                errorMessage={
+                  email_valid ? null : 'Please enter a valid email address'
+                }
+              />
+              <Input
+                leftIcon={
+                  <Icon
+                    name="desktop"
+                    type="font-awesome"
+                    color="rgba(0,0,0,0.8)"
+                    size={25}
+                  />
+                }
+                containerStyle={{ marginVertical: 10 }}
+                onChangeText={this._onEmailChanged}
+                value={email}
+                inputStyle={{ marginLeft: 10, color: 'white' }}
+                keyboardAppearance="light"
+                placeholder="Display Name"
                 autoFocus={false}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -179,12 +208,13 @@ const styles = StyleSheet.create({
     // marginTop: 100,
     backgroundColor: 'transparent',
     width: 250,
-    height: 400,
+    // height: 450,
   },
   loginTitle: {
-    flex: 1,
-    justifyContent: 'center',
+    // flex: 1,
+    // justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 35,
   },
   travelText: {
     color: 'white',
@@ -202,9 +232,10 @@ const styles = StyleSheet.create({
     fontFamily: 'regular',
   },
   loginInput: {
-    flex: 1,
-    justifyContent: 'center',
+    // flex: 1,
+    // justifyContent: 'center',
     alignItems: 'center',
+    // marginTop: -30
   },
   footerView: {
     marginTop: 20,
