@@ -1,85 +1,108 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import { Text, StyleSheet, ScrollView, View } from 'react-native';
+import { Header } from 'react-native-elements';
+import { Calendar } from 'react-native-calendars';
+import ActionButton from 'react-native-action-button';
+import dayjs from 'dayjs';
 
-import React, { Fragment } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentDateTitle: dayjs().format('YYYY MMM DD'),
+    };
+    this.onDayPress = this.onDayPress.bind(this);
+  }
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  _openDrawer = () => {
+    const { navigation } = this.props;
+    navigation.openDrawer();
+  };
 
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Home Screen</Text>
-            </View>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Fragment>
-  );
-};
+  render() {
+    const { currentDateTitle } = this.state;
+    const currentDate = dayjs().format('YYYY-MM-DD');
+
+    return (
+      <View style={styles.container}>
+        <Header
+          leftComponent={{
+            icon: 'menu',
+            color: '#fff',
+            onPress: this._openDrawer,
+          }}
+          centerComponent={{ text: currentDateTitle, style: { color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+        <Calendar
+          style={styles.calendar}
+          onDayPress={() => {}}
+          current={currentDate}
+          markingType={'multi-dot'}
+          markedDates={{
+            '2012-05-08': {
+              dots: [
+                { key: 'vacation', color: 'blue', selectedDotColor: 'white' },
+                { key: 'massage', color: 'red', selectedDotColor: 'white' },
+              ],
+              selected: true,
+            },
+            '2012-05-09': {
+              dots: [
+                { key: 'vacation', color: 'blue', selectedDotColor: 'red' },
+                { key: 'massage', color: 'red', selectedDotColor: 'blue' },
+              ],
+              disabled: true,
+            },
+          }}
+          hideArrows={false}
+        />
+        <ScrollView style={styles.container} />
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          onPress={() => {
+            console.log('hi');
+          }}
+          style={{ flex: 1 }}
+        />
+      </View>
+    );
+  }
+
+  onDayPress(day) {
+    this.setState({
+      selected: day.dateString,
+    });
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  calendar: {
+    borderTopWidth: 1,
+    paddingTop: 5,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    height: 350,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  text: {
+    textAlign: 'center',
+    borderColor: '#bbb',
+    padding: 10,
+    backgroundColor: '#eee',
   },
-  body: {
-    backgroundColor: Colors.white,
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    position: 'relative',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  floatingButton: {
+    // position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    right: 30,
+    bottom: 30,
+    flex: 1,
   },
 });
-
-export default App;
