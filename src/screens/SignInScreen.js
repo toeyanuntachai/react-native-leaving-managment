@@ -8,13 +8,16 @@ import {
   StatusBar,
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { setLoggedin } from '../actions/authentication';
+import firebase from 'react-native-firebase';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const BG_IMAGE = require('../assets/images/bg_sign_in_screen.jpg');
 
-export default class SignInScreen extends Component {
+class SignInScreen extends Component {
   static navigationOptions = {
     header: null,
   };
@@ -28,6 +31,7 @@ export default class SignInScreen extends Component {
       password: '',
       login_failed: false,
       showLoading: false,
+      error: '',
     };
     this.emailInput = React.createRef();
     this.passwordInput = React.createRef();
@@ -39,13 +43,43 @@ export default class SignInScreen extends Component {
     return re.test(email);
   }
 
-  submitLoginCredentials() {
-    const { showLoading } = this.state;
+  async submitLoginCredentials() {
+    const { showLoading, email, password } = this.state;
+    const isEmpty = email === '' || password === '';
 
     this.setState({
       showLoading: !showLoading,
     });
+
+    if (isEmpty) {
+      this.setState({
+        error: 'Please fill your information completely.',
+        showLoading: false,
+      });
+    } else {
+      try {
+        await this._loginwithEmailAndPassword(email, password);
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
   }
+
+  _loginwithEmailAndPassword = async (email, password) => {
+    try {
+      const { navigation, dispatch } = this.props;
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      dispatch(setLoggedin(true));
+      navigation.navigate('App');
+      console.log('loggin complete');
+    } catch (error) {
+      this.setState({
+        error: error.message,
+        showLoading: false,
+      });
+      console.log('error', error);
+    }
+  };
 
   _setEmailRef = () => input => (this.emailInput = input);
 
@@ -67,7 +101,7 @@ export default class SignInScreen extends Component {
   };
 
   render() {
-    const { email, password, email_valid, showLoading } = this.state;
+    const { email, password, email_valid, showLoading, error } = this.state;
 
     return (
       <View style={styles.container}>
@@ -80,6 +114,7 @@ export default class SignInScreen extends Component {
               </View>
             </View>
             <View style={styles.loginInput}>
+              <Text style={styles.errorText}>{error}</Text>
               <Input
                 leftIcon={
                   <Icon
@@ -199,6 +234,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'bold',
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    fontFamily: 'regular',
+    textAlign: 'center',
+  },
   plusText: {
     color: 'white',
     fontSize: 30,
@@ -216,3 +257,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default connect()(SignInScreen);

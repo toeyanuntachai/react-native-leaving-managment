@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { ActivityIndicator, StatusBar, StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
 import { Container, Spinner, Content } from 'native-base';
 
 class AuthLoadingScreen extends React.Component {
@@ -18,8 +14,9 @@ class AuthLoadingScreen extends React.Component {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    // this.props.navigation.navigate(userToken ? 'App' : 'Auth');
-    this.props.navigation.navigate('Auth');
+
+    this.props.navigation.navigate(this.props.isLoggedIn ? 'App' : 'Auth');
+    // this.props.navigation.navigate('Auth');
   };
 
   // Render any loading content that you like here
@@ -35,4 +32,11 @@ class AuthLoadingScreen extends React.Component {
   }
 }
 
-export default AuthLoadingScreen;
+const mapStateToProps = state => {
+  console.log('State:', state);
+  return {
+    isLoggedIn: state.authentication.isLoggedIn,
+  };
+};
+
+export default connect(mapStateToProps)(AuthLoadingScreen);
