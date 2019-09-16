@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, ScrollView, View } from 'react-native';
+import { Text, StyleSheet, ScrollView, View, Button } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Calendar } from 'react-native-calendars';
+import Modal from 'react-native-modal';
 import ActionButton from 'react-native-action-button';
 import dayjs from 'dayjs';
+import AddLeaveDayModal from '../components/AddLeaveDayModal';
 
 export default class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -16,6 +18,8 @@ export default class HomeScreen extends Component {
     super(props);
     this.state = {
       currentDateTitle: dayjs().format('YYYY MMM DD'),
+      currentDate: dayjs().format('YYYY-MM-DD'),
+      isModalVisible: false,
     };
     this.onDayPress = this.onDayPress.bind(this);
   }
@@ -30,9 +34,17 @@ export default class HomeScreen extends Component {
     navigation.navigate('AddLeave');
   };
 
+  _onDayPress = calendarObject => {
+    this.setState({ currentDate: calendarObject.dateString });
+    console.log(calendarObject);
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
   render() {
-    const { currentDateTitle } = this.state;
-    const currentDate = dayjs().format('YYYY-MM-DD');
+    const { currentDateTitle, currentDate } = this.state;
 
     return (
       <View style={styles.container}>
@@ -47,11 +59,11 @@ export default class HomeScreen extends Component {
         />
         <Calendar
           style={styles.calendar}
-          onDayPress={() => {}}
+          onDayPress={this._onDayPress}
           current={currentDate}
           markingType={'multi-dot'}
           markedDates={{
-            '2012-05-08': {
+            '2019-09-17': {
               dots: [
                 { key: 'vacation', color: 'blue', selectedDotColor: 'white' },
                 { key: 'massage', color: 'red', selectedDotColor: 'white' },
@@ -69,9 +81,13 @@ export default class HomeScreen extends Component {
           hideArrows={false}
         />
         <ScrollView style={styles.container} />
+        <AddLeaveDayModal
+          isModalVisible={this.state.isModalVisible}
+          onLeaveDaySubmit={this.toggleModal}
+        />
         <ActionButton
           buttonColor="#008b00"
-          onPress={this._toAddLeaveScreen}
+          onPress={this.toggleModal}
           style={{ flex: 1 }}
         />
       </View>
