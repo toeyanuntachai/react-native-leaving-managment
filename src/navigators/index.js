@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import AddLeaveScreen from '../screens/AddLeaveScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import DemoScreen from '../screens/DemoScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -33,6 +34,7 @@ const AppStack = createDrawerNavigator({
       ),
     },
   },
+  Demo: DemoScreen
 });
 
 const AuthStack = createStackNavigator({
