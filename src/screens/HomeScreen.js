@@ -6,6 +6,12 @@ import ActionButton from 'react-native-action-button';
 import dayjs from 'dayjs';
 
 export default class HomeScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null,
+    };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,6 +23,11 @@ export default class HomeScreen extends Component {
   _openDrawer = () => {
     const { navigation } = this.props;
     navigation.openDrawer();
+  };
+
+  _toAddLeaveScreen = () => {
+    const { navigation } = this.props;
+    navigation.navigate('AddLeave');
   };
 
   render() {
@@ -59,10 +70,8 @@ export default class HomeScreen extends Component {
         />
         <ScrollView style={styles.container} />
         <ActionButton
-          buttonColor="rgba(231,76,60,1)"
-          onPress={() => {
-            console.log('hi');
-          }}
+          buttonColor="#008b00"
+          onPress={this._toAddLeaveScreen}
           style={{ flex: 1 }}
         />
       </View>
