@@ -44,9 +44,6 @@ const AppStack = createDrawerNavigator(
   },
   {
     contentComponent: props => <LogoutScreen {...props} />,
-    drawerOpenRoute: 'DrawerOpen',
-    drawerCloseRoute: 'DrawerClose',
-    drawerToggleRoute: 'DrawerToggle',
   },
 );
 
