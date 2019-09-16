@@ -5,8 +5,15 @@ import SignInScreen from '../screens/SignInScreen';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import HomeScreen from '../screens/HomeScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import AddLeaveScreen from '../screens/AddLeaveScreen';
 
-const AppStack = createDrawerNavigator({ Home: HomeScreen });
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  AddLeave: AddLeaveScreen,
+});
+const AppStack = createDrawerNavigator({
+  Home: HomeStack,
+});
 const AuthStack = createStackNavigator({
   SignIn: SignInScreen,
   Register: RegisterScreen,
