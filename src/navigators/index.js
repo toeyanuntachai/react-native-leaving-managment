@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
-import { View, Button, SafeAreaView } from 'react-native';
+import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {
-  createDrawerNavigator,
-  DrawerNavigatorItems,
-} from 'react-navigation-drawer';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import SignInScreen from '../screens/SignInScreen';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
