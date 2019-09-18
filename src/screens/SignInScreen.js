@@ -69,14 +69,14 @@ class SignInScreen extends Component {
   _loginwithEmailAndPassword = async (email, password) => {
     try {
       const { navigation, dispatch } = this.props;
-      const user = await firebase
+      const respone = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password);
-      const { displayName, email, uid } = user._user;
+      const { displayName, uid } = respone.user._user;
       dispatch(setLoggedin(true));
       dispatch(setProfile({ displayName, email, uid }));
       navigation.navigate('App');
-      console.log('loggin complete');
+      console.log('loggin complete', respone.user._user);
     } catch (error) {
       this.setState({
         error: error.message,

@@ -39,7 +39,7 @@ class RegisterScreen extends Component {
       showLoading: false,
       error: '',
     };
-    this.fireStoreRef = firebase.firestore().collection(USERS_COLLECTION);
+    this.fireStoreUserRef = firebase.firestore().collection(USERS_COLLECTION);
     this.emailInput = React.createRef();
     this.displayNameInput = React.createRef();
     this.passwordInput = React.createRef();
@@ -93,14 +93,25 @@ class RegisterScreen extends Component {
   _storeUserData = async (uid, displayName) => {
     try {
       const { navigation, dispatch } = this.props;
-
       const userdata = { displayName: displayName, profileImage: null };
-      await this.fireStoreRef.doc(uid).set(userdata);
+      await this.fireStoreUserRef.doc(uid).set(userdata);
+      await this._updateUserProfile(displayName);
       dispatch(setLoggedin(true));
-      dispatch(setProfile(userdata));
+      dispatch(setProfile({ uid: uid, ...userdata }));
       navigation.navigate('App');
     } catch (error) {
       console.log('error adding document: ', error);
+    }
+  };
+
+  _updateUserProfile = async displayName => {
+    try {
+      await firebase.auth().currentUser.updateProfile({
+        displayName: displayName,
+        photoURL: '',
+      });
+    } catch (error) {
+      console.log('error updateProfile to firebase auth: ', error);
     }
   };
 
