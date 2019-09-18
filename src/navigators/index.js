@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
@@ -19,7 +19,7 @@ const HomeStack = createStackNavigator({
 const AppStack = createDrawerNavigator(
   {
     Home: {
-      screen: HomeStack,
+      screen: HomeScreen,
       navigationOptions: {
         title: 'Home',
         drawerIcon: ({ tintColor }) => (

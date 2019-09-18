@@ -31,6 +31,8 @@ target 'LeavingManagement' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
   target 'LeavingManagementTests' do
     inherit! :search_paths
     # Pods for testing
