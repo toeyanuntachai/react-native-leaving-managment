@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import Modal from 'react-native-modal';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import dayjs from 'dayjs';
 
 class AddLeaveDayModal extends React.Component {
   state = {
+    title: '',
     startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
     showDatePicker: false,
@@ -23,28 +24,41 @@ class AddLeaveDayModal extends React.Component {
 
   onSubmit = () => {
     const { onLeaveDaySubmit } = this.props;
-    const { startDate, endDate } = this.props;
-    onLeaveDaySubmit(startDate, endDate);
+    const { title, startDate, endDate } = this.state;
+    const scheduleData = {
+      title: title,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    onLeaveDaySubmit(scheduleData);
   };
+
+  onTitleChange = title => this.setState({ title: title });
 
   onStartDateChange = date => this.setState({ startDate: date });
 
   onEndDateChange = date => this.setState({ startDate: date });
 
   render() {
-    const { isModalVisible, onLeaveDaySubmit, onCancel } = this.props;
     const { startDate, endDate } = this.state;
+    const { isModalVisible, onCancel, error } = this.props;
 
     return (
       <View style={styles.container}>
         <Modal isVisible={isModalVisible}>
           <View style={styles.content}>
+            <Text style={styles.errorText}>{error}</Text>
             <View style={styles.titleInput}>
-              <Input placeholder="Title" />
+              <Input
+                placeholder="Title"
+                onChangeText={this.onTitleChange}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
             </View>
             <DatePicker
               style={{ width: 300 }}
-              // date={startDate}
+              date={startDate}
               mode="date"
               placeholder="Start date"
               format="YYYY-MM-DD"
@@ -68,7 +82,7 @@ class AddLeaveDayModal extends React.Component {
             />
             <DatePicker
               style={{ width: 300, marginTop: 15 }}
-              // date={endDate}
+              date={endDate}
               mode="date"
               placeholder="End date"
               format="YYYY-MM-DD"
@@ -125,6 +139,12 @@ const styles = StyleSheet.create({
   },
   datePickerContainer: {
     // marginTop: 15,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    fontFamily: 'regular',
+    textAlign: 'center',
   },
 });
 
