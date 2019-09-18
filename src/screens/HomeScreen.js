@@ -39,9 +39,13 @@ export default class HomeScreen extends Component {
     console.log(calendarObject);
   };
 
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
+  _onLeaveDaySubmit = (startDate, endDate) => {
+    // Do something
+    this.setState({ isModalVisible: false });
   };
+
+  _toggleModal = () =>
+    this.setState({ isModalVisible: !this.state.isModalVisible });
 
   render() {
     const { currentDateTitle, currentDate } = this.state;
@@ -83,11 +87,12 @@ export default class HomeScreen extends Component {
         <ScrollView style={styles.container} />
         <AddLeaveDayModal
           isModalVisible={this.state.isModalVisible}
-          onLeaveDaySubmit={this.toggleModal}
+          onLeaveDaySubmit={this._onLeaveDaySubmit}
+          onCancel={this._toggleModal}
         />
         <ActionButton
           buttonColor="#008b00"
-          onPress={this.toggleModal}
+          onPress={this._toggleModal}
           style={{ flex: 1 }}
         />
       </View>
