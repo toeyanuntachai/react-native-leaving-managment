@@ -10,32 +10,38 @@ import RegisterScreen from '../screens/RegisterScreen';
 import AddLeaveScreen from '../screens/AddLeaveScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DemoScreen from '../screens/DemoScreen';
+import LogoutScreen from '../screens/LogoutScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   AddLeave: AddLeaveScreen,
 });
-const AppStack = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      title: 'Home',
-      drawerIcon: ({ tintColor }) => (
-        <EntypoIcon name="home" color={tintColor} size={25} />
-      ),
+const AppStack = createDrawerNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        title: 'Home',
+        drawerIcon: ({ tintColor }) => (
+          <EntypoIcon name="home" color={tintColor} size={25} />
+        ),
+      },
     },
-  },
-  Profile: {
-    screen: ProfileScreen,
-    navigationOptions: {
-      title: 'Profile',
-      drawerIcon: ({ tintColor }) => (
-        <EntypoIcon name="user" color={tintColor} size={25} />
-      ),
+    Profile: {
+      screen: ProfileScreen,
+      navigationOptions: {
+        title: 'Profile',
+        drawerIcon: ({ tintColor }) => (
+          <EntypoIcon name="user" color={tintColor} size={25} />
+        ),
+      },
     },
+    Demo: DemoScreen,
   },
-  Demo: DemoScreen,
-});
+  {
+    contentComponent: props => <LogoutScreen {...props} />,
+  },
+);
 
 const AuthStack = createStackNavigator({
   SignIn: SignInScreen,
