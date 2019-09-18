@@ -17,7 +17,7 @@ const HomeStack = createStackNavigator({
 });
 const AppStack = createDrawerNavigator({
   Home: {
-    screen: HomeStack,
+    screen: HomeScreen,
     navigationOptions: {
       title: 'Home',
       drawerIcon: ({ tintColor }) => (
@@ -34,7 +34,7 @@ const AppStack = createDrawerNavigator({
       ),
     },
   },
-  Demo: DemoScreen
+  Demo: DemoScreen,
 });
 
 const AuthStack = createStackNavigator({
