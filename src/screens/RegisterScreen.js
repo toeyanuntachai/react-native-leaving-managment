@@ -94,7 +94,7 @@ class RegisterScreen extends Component {
     try {
       const { navigation, dispatch } = this.props;
 
-      const userdata = { displayName: displayName };
+      const userdata = { displayName: displayName, profileImage: null };
       await this.fireStoreRef.doc(uid).set(userdata);
       dispatch(setLoggedin(true));
       navigation.navigate('App');
