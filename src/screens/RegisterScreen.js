@@ -12,7 +12,6 @@ import firebase from 'react-native-firebase';
 import { USERS_COLLECTION } from '../constant';
 import { connect } from 'react-redux';
 import { setLoggedin } from '../actions/authentication';
-import { StackActions, NavigationActions } from 'react-navigation';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
