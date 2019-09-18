@@ -12,6 +12,7 @@ import firebase from 'react-native-firebase';
 import { USERS_COLLECTION } from '../constant';
 import { connect } from 'react-redux';
 import { setLoggedin } from '../actions/authentication';
+import { setProfile } from '../actions/user';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -96,6 +97,7 @@ class RegisterScreen extends Component {
       const userdata = { displayName: displayName, profileImage: null };
       await this.fireStoreRef.doc(uid).set(userdata);
       dispatch(setLoggedin(true));
+      dispatch(setProfile(userdata));
       navigation.navigate('App');
     } catch (error) {
       console.log('error adding document: ', error);
