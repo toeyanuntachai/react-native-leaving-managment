@@ -2,14 +2,14 @@ import React from 'react';
 import { View, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { Input, Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
+import dayjs from 'dayjs';
 
 class AddLeaveDayModal extends React.Component {
   state = {
-    // date: new Date('2020-06-12T14:42:42'),
-    date: '2019-09-16',
+    startDate: dayjs().format('YYYY-MM-DD'),
+    endDate: dayjs().format('YYYY-MM-DD'),
     showDatePicker: false,
   };
 
@@ -21,9 +21,19 @@ class AddLeaveDayModal extends React.Component {
     this.setState({ showDatePicker: false });
   };
 
+  onSubmit = () => {
+    const { onLeaveDaySubmit } = this.props;
+    const { startDate, endDate } = this.props;
+    onLeaveDaySubmit(startDate, endDate);
+  };
+
+  onStartDateChange = date => this.setState({ startDate: date });
+
+  onEndDateChange = date => this.setState({ startDate: date });
+
   render() {
-    const { isModalVisible, onLeaveDaySubmit } = this.props;
-    const { showDatePicker, date } = this.state;
+    const { isModalVisible, onLeaveDaySubmit, onCancel } = this.props;
+    const { startDate, endDate } = this.state;
 
     return (
       <View style={styles.container}>
@@ -32,28 +42,14 @@ class AddLeaveDayModal extends React.Component {
             <View style={styles.titleInput}>
               <Input placeholder="Title" />
             </View>
-            {/*<TouchableNativeFeedback onPress={() => console.log('press')}>*/}
-            {/*  <Input*/}
-            {/*    placeholder="Start"*/}
-            {/*    disabled*/}
-            {/*    rightIcon={*/}
-            {/*      <Icon*/}
-            {/*        name="calendar"*/}
-            {/*        type="font-awesome"*/}
-            {/*        size={24}*/}
-            {/*        color="black"*/}
-            {/*      />*/}
-            {/*    }*/}
-            {/*  />*/}
-            {/*</TouchableNativeFeedback>*/}
             <DatePicker
               style={{ width: 300 }}
-              date={this.state.date}
+              // date={startDate}
               mode="date"
-              placeholder="select date"
+              placeholder="Start date"
               format="YYYY-MM-DD"
-              minDate="2016-05-01"
-              maxDate="2016-06-01"
+              // minDate="2016-05-01"
+              // maxDate="2016-06-01"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{
@@ -68,18 +64,14 @@ class AddLeaveDayModal extends React.Component {
                 // }
                 // ... You can check the source to find the other keys.
               }}
-              onDateChange={date => {
-                this.setState({ date: date });
-              }}
+              onDateChange={this.onStartDateChange}
             />
             <DatePicker
               style={{ width: 300, marginTop: 15 }}
-              date={this.state.date}
+              // date={endDate}
               mode="date"
-              placeholder="select date"
+              placeholder="End date"
               format="YYYY-MM-DD"
-              minDate="2016-05-01"
-              maxDate="2016-06-01"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{
@@ -94,36 +86,13 @@ class AddLeaveDayModal extends React.Component {
                 // }
                 // ... You can check the source to find the other keys.
               }}
-              onDateChange={date => {
-                this.setState({ date: date });
-              }}
+              onDateChange={this.onEndDateChange}
             />
-            {/*<Input*/}
-            {/*  placeholder="End"*/}
-            {/*  disabled*/}
-            {/*  rightIcon={*/}
-            {/*    <Icon*/}
-            {/*      name="calendar"*/}
-            {/*      type="font-awesome"*/}
-            {/*      size={24}*/}
-            {/*      color="black"*/}
-            {/*    />*/}
-            {/*  }*/}
-            {/*/>*/}
             <View style={styles.buttonAction}>
-              <Button title="Cancel" type="clear" />
-              <Button onPress={onLeaveDaySubmit} title="Save" />
+              <Button title="Cancel" type="clear" onPress={onCancel} />
+              <Button onPress={this.onSubmit} title="Save" />
             </View>
           </View>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode={'date'}
-              is24Hour={true}
-              display="default"
-              onChange={this.onDateSelected}
-            />
-          )}
         </Modal>
       </View>
     );
