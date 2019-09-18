@@ -11,6 +11,7 @@ import { Input, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { setLoggedin } from '../actions/authentication';
 import firebase from 'react-native-firebase';
+import {setProfile} from '../actions/user';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -68,8 +69,12 @@ class SignInScreen extends Component {
   _loginwithEmailAndPassword = async (email, password) => {
     try {
       const { navigation, dispatch } = this.props;
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      const user = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      const { displayName, email, uid } = user._user;
       dispatch(setLoggedin(true));
+      dispatch(setProfile({ displayName, email, uid }));
       navigation.navigate('App');
       console.log('loggin complete');
     } catch (error) {
