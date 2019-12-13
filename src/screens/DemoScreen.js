@@ -169,7 +169,7 @@ export default class DemoScreen extends Component {
         </Text>
         <Calendar
           style={styles.calendar}
-          onDayLongPress={this.onDayLongPress}
+          // onDayLongPress={this.onDayLongPress}
           hideExtraDays
           current={'2018-03-01'}
           minDate={'2018-03-01'}

@@ -11,11 +11,18 @@ import AddLeaveScreen from '../screens/AddLeaveScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DemoScreen from '../screens/DemoScreen';
 import LogoutScreen from '../screens/LogoutScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   AddLeave: AddLeaveScreen,
 });
+
+const ProileStack = createStackNavigator({
+  Profile: ProfileScreen,
+  EditProfile: EditProfileScreen,
+});
+
 const AppStack = createDrawerNavigator(
   {
     Home: {
@@ -28,7 +35,7 @@ const AppStack = createDrawerNavigator(
       },
     },
     Profile: {
-      screen: ProfileScreen,
+      screen: ProileStack,
       navigationOptions: {
         title: 'Profile',
         drawerIcon: ({ tintColor }) => (
