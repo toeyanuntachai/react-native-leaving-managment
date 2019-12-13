@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import Modal from 'react-native-modal';
+import { connect } from 'react-redux';
 import { Input, Button, Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
@@ -11,6 +12,7 @@ class AddLeaveDayModal extends React.Component {
     title: '',
     startDate: dayjs().format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
+    date: dayjs().format('YYYY-MM-DD'),
     showDatePicker: false,
   };
 
@@ -23,24 +25,28 @@ class AddLeaveDayModal extends React.Component {
   };
 
   onSubmit = () => {
-    const { onLeaveDaySubmit } = this.props;
-    const { title, startDate, endDate } = this.state;
+    const { onLeaveDaySubmit, uid } = this.props;
+    const { title, startDate, endDate, date } = this.state;
     const scheduleData = {
       title: title,
-      startDate: startDate,
-      endDate: endDate,
+      date: date,
+      uid: uid,
+      // startDate: startDate,
+      // endDate: endDate,
     };
     onLeaveDaySubmit(scheduleData);
   };
 
   onTitleChange = title => this.setState({ title: title });
 
+  onDateChange = date => this.setState({ date: date });
+
   onStartDateChange = date => this.setState({ startDate: date });
 
-  onEndDateChange = date => this.setState({ startDate: date });
+  onEndDateChange = date => this.setState({ endDate: date });
 
   render() {
-    const { startDate, endDate } = this.state;
+    const { startDate, endDate, date } = this.state;
     const { isModalVisible, onCancel, error } = this.props;
 
     return (
@@ -57,6 +63,30 @@ class AddLeaveDayModal extends React.Component {
               />
             </View>
             <DatePicker
+              style={{ width: 300 }}
+              date={date}
+              mode="date"
+              placeholder="Start date"
+              format="YYYY-MM-DD"
+              // minDate="2016-05-01"
+              // maxDate="2016-06-01"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  right: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                // dateInput: {
+                //   marginLeft: 36
+                // }
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={this.onDateChange}
+            />
+            {/* <DatePicker
               style={{ width: 300 }}
               date={startDate}
               mode="date"
@@ -79,8 +109,8 @@ class AddLeaveDayModal extends React.Component {
                 // ... You can check the source to find the other keys.
               }}
               onDateChange={this.onStartDateChange}
-            />
-            <DatePicker
+            /> */}
+            {/* <DatePicker
               style={{ width: 300, marginTop: 15 }}
               date={endDate}
               mode="date"
@@ -101,7 +131,7 @@ class AddLeaveDayModal extends React.Component {
                 // ... You can check the source to find the other keys.
               }}
               onDateChange={this.onEndDateChange}
-            />
+            /> */}
             <View style={styles.buttonAction}>
               <Button title="Cancel" type="clear" onPress={onCancel} />
               <Button onPress={this.onSubmit} title="Save" />
@@ -112,6 +142,13 @@ class AddLeaveDayModal extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log('State:', state);
+  return {
+    uid: state.user.uid,
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -148,4 +185,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddLeaveDayModal;
+
+export default connect(mapStateToProps)(AddLeaveDayModal);
+// export default AddLeaveDayModal;

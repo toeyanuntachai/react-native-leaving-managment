@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, ScrollView, View, Button } from 'react-native';
-import { Header } from 'react-native-elements';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  FlatList,
+  Text,
+  TextInput,
+} from 'react-native';
+import { Header, ListItem } from 'react-native-elements';
 import { Calendar } from 'react-native-calendars';
 import { SCHEDULES_COLLECTION, USERS_COLLECTION } from '../constant';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
-import Modal from 'react-native-modal';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import ActionButton from 'react-native-action-button';
 import dayjs from 'dayjs';
 import AddLeaveDayModal from '../components/AddLeaveDayModal';
+import _ from 'lodash';
 
 class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -24,12 +32,19 @@ class HomeScreen extends Component {
       currentDate: dayjs().format('YYYY-MM-DD'),
       isModalVisible: false,
       error: '',
+      dateMarked: null,
+      schedules: [],
     };
+
     this.fireStoreScheduleRef = firebase
       .firestore()
       .collection(SCHEDULES_COLLECTION);
     this.fireStoreUserRef = firebase.firestore().collection(USERS_COLLECTION);
     this.onDayPress = this.onDayPress.bind(this);
+  }
+
+  componentWillMount() {
+    this.getSchedule();
   }
 
   _openDrawer = () => {
@@ -43,8 +58,8 @@ class HomeScreen extends Component {
   };
 
   _onDayPress = calendarObject => {
-    this.setState({ currentDate: calendarObject.dateString });
     console.log(calendarObject);
+    this.setState({ currentDate: calendarObject.dateString });
   };
 
   _onLeaveDaySubmit = async scheduleData => {
@@ -70,6 +85,34 @@ class HomeScreen extends Component {
     }
   };
 
+  getSchedule = async () => {
+    const { uid } = this.props;
+    var dateRaws = {};
+    var schedulesRaws = [];
+    try {
+      var query = await this.fireStoreScheduleRef.where('uid', '==', uid);
+      query.get().then(querySnapshot => {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, ' => ', doc.data());
+          var dateObj = {};
+          var scheduleObj = {};
+          dateObj[`${doc.data().date}`] = {
+            selected: true,
+            scheduleID: doc.id,
+          };
+          Object.assign(dateRaws, dateObj);
+          schedulesRaws.push(doc.data());
+        });
+        this.setState({ dateMarked: dateRaws });
+        this.setState({ schedules: schedulesRaws });
+        console.log('dateRaws', dateRaws);
+        console.log('schedulesRaws', schedulesRaws);
+      });
+    } catch (error) {
+      console.log('get Schedule', error);
+    }
+  };
+
   _storeScheduleData = async scheduleData => {
     try {
       console.log('scheduleData', scheduleData);
@@ -77,6 +120,7 @@ class HomeScreen extends Component {
       // console.log('response', response);
       const scheduleID = response.id;
       await this._storeScheduleID(scheduleID);
+      this.getSchedule();
     } catch (error) {
       console.log('error adding scheduleData: ', error);
     }
@@ -90,15 +134,29 @@ class HomeScreen extends Component {
         scheduleID: firebase.firestore.FieldValue.arrayUnion(scheduleID),
       });
     } catch (error) {
-      console.log('error adding scheduleID: ', error);
+      console.log('error adding storeScheduleID: ', error.message);
     }
   };
 
   _toggleModal = () =>
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
+  listEmptyComponent() {
+    return (
+      <View style={[styles.listEmpty, styles.container]}>
+        <Text></Text>
+      </View>
+    );
+  }
+
   render() {
-    const { currentDateTitle, currentDate, error } = this.state;
+    const {
+      currentDateTitle,
+      currentDate,
+      error,
+      dateMarked,
+      schedules,
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -108,7 +166,10 @@ class HomeScreen extends Component {
             color: '#fff',
             onPress: this._openDrawer,
           }}
-          centerComponent={{ text: currentDateTitle, style: { color: '#fff' } }}
+          centerComponent={{
+            text: currentDateTitle,
+            style: { color: '#fff' },
+          }}
           rightComponent={{ icon: 'home', color: '#fff' }}
         />
         <Calendar
@@ -116,23 +177,22 @@ class HomeScreen extends Component {
           onDayPress={this._onDayPress}
           current={currentDate}
           markingType={'multi-dot'}
-          markedDates={{
-            '2019-09-17': {
-              dots: [
-                { key: 'vacation', color: 'blue', selectedDotColor: 'white' },
-                { key: 'massage', color: 'red', selectedDotColor: 'white' },
-              ],
-              selected: true,
-            },
-            '2012-05-09': {
-              dots: [
-                { key: 'vacation', color: 'blue', selectedDotColor: 'red' },
-                { key: 'massage', color: 'red', selectedDotColor: 'blue' },
-              ],
-              disabled: true,
-            },
-          }}
+          markedDates={dateMarked}
           hideArrows={false}
+        />
+        <FlatList
+          data={schedules}
+          ListEmptyComponent={this.listEmptyComponent}
+          renderItem={({ item, index }) => (
+            <ListItem
+              containerStyle={{
+                borderBottomColor: 'gray',
+                borderBottomWidth: 0.5,
+              }}
+              title={item.title}
+              subtitle={item.date}
+            />
+          )}
         />
         <ScrollView style={styles.container} />
         <AddLeaveDayModal
@@ -173,8 +233,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    position: 'relative',
+    // backgroundColor: 'white',
+    // position: 'relative',
   },
   floatingButton: {
     // position: 'absolute',
@@ -185,6 +245,11 @@ const styles = StyleSheet.create({
     right: 30,
     bottom: 30,
     flex: 1,
+  },
+  listEmpty: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    marginTop: 50,
   },
 });
 
