@@ -194,14 +194,14 @@ class SignInScreen extends Component {
               titleStyle={{ fontWeight: 'bold', color: 'white' }}
             />
             <View style={styles.footerView}>
-              <Button
+              {/* <Button
                 title="Create an Account"
                 type="clear"
                 activeOpacity={0.5}
                 titleStyle={{ color: 'white', fontSize: 15 }}
                 containerStyle={{ marginTop: -10 }}
                 onPress={this._toRegister}
-              />
+              /> */}
             </View>
           </View>
         </ImageBackground>
