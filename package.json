@@ -16,7 +16,7 @@
     "native-base": "^2.13.7",
     "nstall": "^0.2.0",
     "react": "16.8.6",
-    "react-native": "0.60.5",
+    "react-native": "0.62.3",
     "react-native-action-button": "^2.8.5",
     "react-native-calendars": "^1.212.0",
     "react-native-datepicker": "^1.7.2",
